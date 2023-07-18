@@ -19,7 +19,7 @@ function CircularProgress({
       <svg className="w-14 h-14">
         <circle
           className="text-gray-300"
-          stroke-width="4"
+          strokeWidth="4"
           stroke="currentColor"
           fill="transparent"
           r="24"
@@ -35,10 +35,10 @@ function CircularProgress({
               : "text-red-600",
             "-rotate-90 origin-center"
           )}
-          stroke-width="4"
+          strokeWidth="4"
           strokeDasharray={`${circumference} ${circumference}`}
           strokeDashoffset={circumference - (percent / 100) * circumference}
-          stroke-linecap="round"
+          strokeLinecap="round"
           stroke="currentColor"
           fill="transparent"
           r="24"

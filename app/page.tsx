@@ -7,6 +7,7 @@ import CircularProgress from "@/components/circularProgress";
 import Pagination from "@/components/pagination";
 import Link from "next/link";
 import { fetchAPI } from "@/helpers/fetchAPI";
+import imgLoader from "@/helpers/imgLoader";
 
 export type MovieInterface = {
   adult: boolean;
@@ -36,22 +37,10 @@ type GenresInterface = {
   genres: Array<{ id: number; name: string }>;
 };
 
-export const imgLoader = ({
-  src,
-  width,
-  quality,
-}: {
-  src: string;
-  width: number;
-  quality?: number;
-}) => {
-  return quality
-    ? `https://image.tmdb.org/t/p/w250_and_h141_face${src}`
-    : `https://image.tmdb.org/t/p/original${src}`;
-};
-
 export default function Home() {
   const [page, setPage] = React.useState(1);
+  const [search, setSearch] = React.useState("");
+  const [filter, setFilter] = React.useState("");
   const [movieData, setMovieData] = React.useState<FetchMoviesInterface>();
   const [genres, setGenres] = React.useState<GenresInterface>();
   const [bgImage, setBgImage] = React.useState("");
@@ -59,12 +48,14 @@ export default function Home() {
     (async () => {
       try {
         const data = await fetchAPI(
-          `https://api.themoviedb.org/3/discover/movie?page=${page}`
+          filter
+            ? `https://api.themoviedb.org/3/search/movie?query=${filter}&page=${page}`
+            : `https://api.themoviedb.org/3/discover/movie?page=${page}`
         );
         setMovieData(data);
       } catch (error) {}
     })();
-  }, [page]);
+  }, [page, filter]);
   React.useEffect(() => {
     (async () => {
       try {
@@ -125,7 +116,45 @@ export default function Home() {
           className="h-[450px] w-[500px] rounded-[100%] absolute -bottom-[200px] -right-[200px] z-0"
           style={{ border: "125px solid #FFD86C" }}
         />
-        <div className="container mx-auto flex flex-col justify-around lg:px-40 lg:py-20">
+        <div className="container mx-auto flex flex-col space-y-10 justify-around lg:px-40 lg:py-20">
+          <div
+            className={
+              "h-52 w-full bg-no-repeat bg-center bg-cover z-10 flex items-center px-5"
+            }
+            style={{
+              backgroundImage: `url(https://www.themoviedb.org/assets/2/v4/misc/trending-bg-39afc2a5f77e31d469b25c187814c0a2efef225494c038098d62317d923f8415.svg)`,
+            }}
+          >
+            <div className="relative w-full">
+              <input
+                type="text"
+                className="bg-white rounded-3xl ring-1 ring-gray-400 placeholder:text-gray-400 w-full h-10 pl-5 pr-28"
+                placeholder="Search for a movie..."
+                value={search}
+                onKeyPress={(event) => {
+                  if (event.key === "enter") {
+                    setFilter(search);
+                  }
+                }}
+                onChange={(event) => {
+                  setSearch(event.currentTarget.value);
+                }}
+              />
+              <button
+                className="absolute right-0 rounded-3xl text-white h-10 w-28 bg-gradient-to-br from-yellow-500 to-teal-500"
+                onClick={() => {
+                  if (filter !== search) {
+                    setFilter(search);
+                  } else {
+                    setSearch("");
+                    setFilter("");
+                  }
+                }}
+              >
+                {filter !== search || !filter.length ? "Search" : "Reset"}
+              </button>
+            </div>
+          </div>
           <div className="grid grid-cols-3 gap-8">
             {movieData?.results?.map((item) => (
               <Link key={item.id} href={`/detail/${item.id}`}>
@@ -134,8 +163,10 @@ export default function Home() {
                     <Image
                       className="rounded-xl shadow-md"
                       loader={imgLoader}
-                      src={item.poster_path}
-                      alt={""}
+                      src={
+                        item.poster_path === null ? "null" : item.poster_path
+                      }
+                      alt={"poster"}
                       width={"1000"}
                       height={"1000"}
                     />
@@ -153,7 +184,7 @@ export default function Home() {
                       </div>
                     </div>
                     <CircularProgress
-                      percent={item.vote_average * 10}
+                      percent={Math.round((item.vote_average || 0) * 10)}
                       className="absolute -bottom-6 left-3"
                     />
                   </div>

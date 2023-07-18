@@ -1,7 +1,8 @@
 "use client";
-import { MovieInterface } from "@/app/page";
 import CircularProgress from "@/components/circularProgress";
+import { DetailInterface } from "@/components/interface";
 import LoadingPage from "@/components/loadingPage";
+import SimpleCard from "@/components/movies/simpleCard";
 import { fetchAPI } from "@/helpers/fetchAPI";
 import { formatCurrency } from "@/helpers/formatCurrency";
 import imgLoader from "@/helpers/imgLoader";
@@ -10,51 +11,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-
-type DetailInterface = {
-  adult: boolean;
-  backdrop_path: string;
-  belongs_to_collection: null;
-  budget: number;
-  genres: Array<{
-    id: number;
-    name: string;
-  }>;
-  homepage: string;
-  id: number;
-  imdb_id: string;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  production_companies: Array<{
-    id: number;
-    logo_path: string;
-    name: string;
-    origin_country: string;
-  }>;
-  production_countries: Array<{
-    iso_3166_1: string;
-    name: string;
-  }>;
-  release_date: string;
-  revenue: number;
-  runtime: number;
-  spoken_languages: Array<{
-    english_name: string;
-    iso_639_1: string;
-    name: string;
-  }>;
-  status: string;
-  tagline: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-  keywords: Array<{ id: number; name: string }>;
-  similars: Array<MovieInterface>;
-};
 
 function DetailPage() {
   const [detailData, setDetailData] = React.useState<DetailInterface>();
@@ -190,35 +146,7 @@ function DetailPage() {
         <div className="overflow-x-auto overflow-y-hidden w-full h-52 min-w-0">
           <div className="flex flex-nowrap space-x-3 h-full pb-2">
             {detailData.similars.map((item) => (
-              <Link
-                href={`/detail/${item.id}`}
-                key={item.id}
-                title={item.title}
-                className="group w-[350px]"
-              >
-                <div className="relative h-[88%] w-[inherit]">
-                  <div
-                    className="rounded-md shadow-md w-full h-full bg-no-repeat bg-center bg-cover"
-                    style={{
-                      backgroundImage: `url(https://image.tmdb.org/t/p/w250_and_h141_face${
-                        item.backdrop_path || item.poster_path
-                      })`,
-                    }}
-                  />
-                  <div className="rounded-b-md w-full px-3 py-2 bg-gray-200 opacity-90 absolute bottom-0 group-hover:visible invisible">
-                    <span>
-                      &#128467;{" "}
-                      {new Date(item.release_date).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="h-[12%] flex space-x-3 justify-between px-1">
-                  <span className="w-[85%] whitespace-nowrap overflow-hidden text-ellipsis inline-block">
-                    {item.title}
-                  </span>
-                  <span>{Math.round(item.vote_average * 10)}%</span>
-                </div>
-              </Link>
+              <SimpleCard item={item} key={item.id} />
             ))}
           </div>
         </div>

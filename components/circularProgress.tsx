@@ -29,7 +29,7 @@ function CircularProgress({
         <circle
           className={classNames(
             percent >= 70
-              ? "text-blue-600"
+              ? "text-teal-600"
               : percent >= 45
               ? "text-yellow-600"
               : "text-red-600",

@@ -6,24 +6,27 @@ import classNames from "../helpers/classnames";
 import CircularProgress from "@/components/circularProgress";
 import Pagination from "@/components/pagination";
 import Link from "next/link";
+import { fetchAPI } from "@/helpers/fetchAPI";
 
-type MovieInterface = {
-  results: Array<{
-    adult: boolean;
-    backdrop_path: string;
-    genre_ids: Array<number>;
-    id: number;
-    original_language: string;
-    original_title: string;
-    overview: string;
-    popularity: number;
-    poster_path: string;
-    release_date: string;
-    title: string;
-    video: boolean;
-    vote_average: 7.7;
-    vote_count: number;
-  }>;
+export type MovieInterface = {
+  adult: boolean;
+  backdrop_path: string;
+  genre_ids: Array<number>;
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+};
+
+type FetchMoviesInterface = {
+  results: Array<MovieInterface>;
   page: number;
   total_pages: number;
   total_results: number;
@@ -33,21 +36,30 @@ type GenresInterface = {
   genres: Array<{ id: number; name: string }>;
 };
 
+export const imgLoader = ({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width: number;
+  quality?: number;
+}) => {
+  return quality
+    ? `https://image.tmdb.org/t/p/w250_and_h141_face${src}`
+    : `https://image.tmdb.org/t/p/original${src}`;
+};
+
 export default function Home() {
   const [page, setPage] = React.useState(1);
-  const [movieData, setMovieData] = React.useState<MovieInterface>();
+  const [movieData, setMovieData] = React.useState<FetchMoviesInterface>();
   const [genres, setGenres] = React.useState<GenresInterface>();
   const [bgImage, setBgImage] = React.useState("");
   React.useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?page=${page}`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.access_token}`,
-            },
-          }
+        const data = await fetchAPI(
+          `https://api.themoviedb.org/3/discover/movie?page=${page}`
         );
         setMovieData(data);
       } catch (error) {}
@@ -56,13 +68,8 @@ export default function Home() {
   React.useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get(
-          `https://api.themoviedb.org/3/genre/movie/list`,
-          {
-            headers: {
-              Authorization: `Bearer ${process.env.access_token}`,
-            },
-          }
+        const data = await fetchAPI(
+          `https://api.themoviedb.org/3/genre/movie/list`
         );
         setGenres(data);
       } catch (error) {}
@@ -74,17 +81,7 @@ export default function Home() {
       setBgImage(movieData.results[randomIdx]?.backdrop_path);
     }
   }, [movieData, bgImage]);
-  const imgLoader = ({
-    src,
-    width,
-    quality,
-  }: {
-    src: string;
-    width: number;
-    quality?: number;
-  }) => {
-    return `https://image.tmdb.org/t/p/original${src}`;
-  };
+
   return (
     <main className="flex flex-col items-center justify-between">
       <section className={"h-[calc(100vh-4rem)] w-screen relative"}>

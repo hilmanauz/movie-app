@@ -1,6 +1,6 @@
 "use client";
 import CircularProgress from "@/components/circularProgress";
-import { DetailInterface } from "@/components/interface";
+import { DetailTVInterface } from "@/components/interface";
 import LoadingPage from "@/components/loadingPage";
 import SimpleCard from "@/components/movies/simpleCard";
 import { fetchAPI } from "@/helpers/fetchAPI";
@@ -9,23 +9,23 @@ import imgLoader from "@/helpers/imgLoader";
 import time_convert from "@/helpers/timeConvert";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 
 function DetailPage() {
-  const [detailData, setDetailData] = React.useState<DetailInterface>();
+  const [detailData, setDetailData] = React.useState<DetailTVInterface>();
   const params = useParams();
   React.useEffect(() => {
     (async () => {
       try {
         const data = await fetchAPI(
-          `https://api.themoviedb.org/3/movie/${params.id}`
+          `https://api.themoviedb.org/3/tv/${params.id}`
         );
         const similarData = await fetchAPI(
-          `https://api.themoviedb.org/3/movie/${params.id}/similar`
+          `https://api.themoviedb.org/3/tv/${params.id}/similar`
         );
         const keywordData = await fetchAPI(
-          `https://api.themoviedb.org/3/movie/${params.id}/keywords`
+          `https://api.themoviedb.org/3/tv/${params.id}/keywords`
         );
 
         setDetailData({
@@ -67,17 +67,25 @@ function DetailPage() {
               </div>
               <div className="flex flex-col flex-1 space-y-2">
                 <h2 className="text-4xl font-extrabold">
-                  {detailData.title} (
-                  {new Date(detailData.release_date).getFullYear()})
+                  {detailData.name} (
+                  {new Date(detailData.first_air_date).getFullYear()})
+                  {detailData.homepage && (
+                    <a
+                      href={detailData.homepage}
+                      target="_blank"
+                      title="Go to Homepage"
+                    >
+                      <sup className="px-1 cursor-pointer">&#128279;</sup>
+                    </a>
+                  )}
                 </h2>
                 <div className="flex space-x-1 text-md">
                   <span>
-                    {new Date(detailData.release_date).toLocaleDateString()}
+                    {new Date(detailData.first_air_date).toLocaleDateString()}
                   </span>
-                  <span className="before:content-['•'] before:mr-1 after:content-['•'] after:ml-1">
-                    {detailData.genres.map((item) => item.name).join(", ")}
+                  <span className="before:content-['•'] before:mr-1">
+                    {detailData.genres?.map((item) => item.name).join(", ")}
                   </span>
-                  <span>{time_convert(detailData.runtime)}</span>
                 </div>
                 <div className="flex space-x-1">
                   <div className="flex items-center space-x-1">
@@ -110,22 +118,14 @@ function DetailPage() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-md">Budget</h3>
-                      <span>
-                        {formatCurrency(detailData.budget, "en-US", "USD")}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-md">Revenue</h3>
-                      <span>
-                        {formatCurrency(detailData.revenue, "en-US", "USD")}
-                      </span>
+                      <h3 className="font-bold text-md">Type</h3>
+                      <span>{detailData.type}</span>
                     </div>
                   </div>
                   <div className="col-span-2 flex flex-col space-y-2 h-fit">
                     <h3 className="font-bold text-md">Keywords</h3>
                     <div className="flex flex-wrap gap-2">
-                      {detailData.keywords.map((item) => (
+                      {detailData.keywords?.map((item) => (
                         <div
                           key={item.id}
                           className="bg-gray-400 text-white rounded-md py-1 px-2"
@@ -145,7 +145,7 @@ function DetailPage() {
         <h3 className="font-semibold text-2xl pb-2">Similar Movies</h3>
         <div className="overflow-x-auto overflow-y-hidden w-full h-52 min-w-0">
           <div className="flex flex-nowrap space-x-3 h-full pb-2">
-            {detailData.similars.map((item) => (
+            {detailData.similars?.map((item) => (
               <SimpleCard item={item} key={item.id} />
             ))}
           </div>

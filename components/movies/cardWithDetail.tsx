@@ -3,18 +3,20 @@ import Link from "next/link";
 import React from "react";
 import CircularProgress from "../circularProgress";
 import Image from "next/image";
-import { GenresInterface, MovieInterface } from "../interface";
+import { GenresInterface, DiscoveryInterface } from "../interface";
 
 function CardWithDetail({
   item,
   genres,
+  category,
 }: {
-  item: MovieInterface;
+  item: DiscoveryInterface;
   genres?: GenresInterface;
+  category: string;
 }) {
   return (
-    <Link key={item.id} href={`/detail/${item.id}`}>
-      <div className="z-10 flex flex-col border-gray-500 border-b rounded-sm group hover:shadow-md cursor-pointer">
+    <Link key={item.id} href={`/${category}/${item.id}`}>
+      <div className="flex flex-col border-gray-500 border-b rounded-sm group hover:shadow-md cursor-pointer bg-white">
         <div className="relative">
           <Image
             className="rounded-xl shadow-md"
@@ -43,9 +45,11 @@ function CardWithDetail({
           />
         </div>
         <div className="flex flex-col pt-8 pb-4 px-3">
-          <h4 className="font-bold text-base">{item.title}</h4>
+          <h4 className="font-bold text-base">{item.title || item.name}</h4>
           <span className="text-gray-500 text-base">
-            {new Date(item.release_date).toLocaleDateString("en-US", {
+            {new Date(
+              item.release_date || item.first_air_date || ""
+            ).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",

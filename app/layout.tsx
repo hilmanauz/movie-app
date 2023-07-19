@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={classNames(inter.className, "w-screen overflow-y-auto")}>
         <nav className="h-16 bg-[#91770f] sticky top-0 z-50 shadow-lg">
-          <div className="container mx-auto h-full flex items-center">
+          <div className="container mx-auto h-full flex items-center px-5 lg:px-0">
             <Link href={"/"} className="h-fit">
               <Image
                 className="cursor-pointer"

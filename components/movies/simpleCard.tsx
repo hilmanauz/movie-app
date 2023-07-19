@@ -1,11 +1,13 @@
 import Link from "next/link";
 import React from "react";
-import { MovieInterface } from "../interface";
+import { DiscoveryInterface } from "../interface";
+import { useSearchParams } from "next/navigation";
 
-function SimpleCard({ item }: { item: MovieInterface }) {
+function SimpleCard({ item }: { item: DiscoveryInterface }) {
+  const searchParams = useSearchParams();
   return (
     <Link
-      href={`/detail/${item.id}`}
+      href={`/detail/${item.id}?category=${searchParams.get("category")}`}
       key={item.id}
       title={item.title}
       className="group w-[350px]"
@@ -21,13 +23,16 @@ function SimpleCard({ item }: { item: MovieInterface }) {
         />
         <div className="rounded-b-md w-full px-3 py-2 bg-gray-200 opacity-90 absolute bottom-0 group-hover:visible invisible">
           <span>
-            &#128467; {new Date(item.release_date).toLocaleDateString()}
+            &#128467;{" "}
+            {new Date(
+              item.release_date || item.first_air_date || ""
+            ).toLocaleDateString()}
           </span>
         </div>
       </div>
       <div className="h-[12%] flex space-x-3 justify-between px-1">
         <span className="w-[85%] whitespace-nowrap overflow-hidden text-ellipsis inline-block">
-          {item.title}
+          {item.title || item.name}
         </span>
         <span>{Math.round(item.vote_average * 10)}%</span>
       </div>

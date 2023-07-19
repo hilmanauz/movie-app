@@ -54,7 +54,7 @@ function DetailPage() {
                 "linear-gradient(to right, rgba(241.5, 220.5, 199.5, 1) calc((50vw - 170px) - 340px), rgba(241.5, 220.5, 199.5, 0.84) 50%, rgba(241.5, 220.5, 199.5, 0.84) 100%)",
             }}
           >
-            <div className="h-full container mx-auto flex items-center">
+            <div className="h-full container mx-auto flex lg:flex-row flex-col items-center">
               <div className="h-full flex py-10 px-8 space-x-4">
                 <Image
                   className="rounded-xl shadow-md"
@@ -66,7 +66,7 @@ function DetailPage() {
                 />
               </div>
               <div className="flex flex-col flex-1 space-y-2">
-                <h2 className="text-4xl font-extrabold">
+                <h2 className="lg:text-4xl text-2xl font-extrabold">
                   {detailData.name} (
                   {new Date(detailData.first_air_date).getFullYear()})
                   {detailData.homepage && (
@@ -79,7 +79,7 @@ function DetailPage() {
                     </a>
                   )}
                 </h2>
-                <div className="flex space-x-1 text-md">
+                <div className="flex space-x-1 lg:text-md text-sm">
                   <span>
                     {new Date(detailData.first_air_date).toLocaleDateString()}
                   </span>
@@ -98,9 +98,9 @@ function DetailPage() {
                 <i className="text-gray-700">{detailData.tagline}</i>
                 <div>
                   <h3 className="font-bold text-xl">Overview</h3>
-                  <h4>{detailData.overview}</h4>
+                  <h4 className="text-md lg:text-lg">{detailData.overview}</h4>
                 </div>
-                <div className="grid grid-cols-3">
+                <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 lg:gap-2">
                   <div className="col-span-1 flex flex-col space-y-2">
                     <div>
                       <h3 className="font-bold text-md">Status</h3>

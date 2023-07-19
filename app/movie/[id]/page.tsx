@@ -154,7 +154,7 @@ function DetailPage() {
         <div className="overflow-x-auto overflow-y-hidden w-full h-52 min-w-0">
           <div className="flex flex-nowrap space-x-3 h-full pb-2">
             {detailData.similars?.map((item) => (
-              <SimpleCard item={item} key={item.id} />
+              <SimpleCard item={item} key={item.id} category="movie" />
             ))}
           </div>
         </div>

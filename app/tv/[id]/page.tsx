@@ -31,7 +31,7 @@ function DetailPage() {
         setDetailData({
           ...data,
           similars: similarData.results,
-          keywords: keywordData.keywords,
+          keywords: keywordData.results,
         });
       } catch (error) {}
     })();
@@ -51,7 +51,7 @@ function DetailPage() {
             className="h-full"
             style={{
               backgroundImage:
-                "linear-gradient(to right, rgba(241.5, 220.5, 199.5, 1) calc((50vw - 170px) - 340px), rgba(241.5, 220.5, 199.5, 0.84) 50%, rgba(241.5, 220.5, 199.5, 0.84) 100%)",
+                "linear-gradient(to right, rgba(10.5, 31.5, 73.5, 1) calc((50vw - 170px) - 340px), rgba(10.5, 31.5, 73.5, 0.84) 50%, rgba(10.5, 31.5, 73.5, 0.84) 100%)",
             }}
           >
             <div className="h-full container mx-auto flex lg:flex-row flex-col items-center">
@@ -66,7 +66,7 @@ function DetailPage() {
                 />
               </div>
               <div className="flex flex-col flex-1 space-y-2">
-                <h2 className="lg:text-4xl text-2xl font-extrabold">
+                <h2 className="lg:text-4xl text-2xl font-extrabold text-white">
                   {detailData.name} (
                   {new Date(detailData.first_air_date).getFullYear()})
                   {detailData.homepage && (
@@ -79,7 +79,7 @@ function DetailPage() {
                     </a>
                   )}
                 </h2>
-                <div className="flex space-x-1 lg:text-md text-sm">
+                <div className="flex space-x-1 lg:text-md text-sm text-white">
                   <span>
                     {new Date(detailData.first_air_date).toLocaleDateString()}
                   </span>
@@ -88,19 +88,19 @@ function DetailPage() {
                   </span>
                 </div>
                 <div className="flex space-x-1">
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1 text-white">
                     <CircularProgress
                       percent={Math.round(detailData.vote_average * 10)}
                     />
                     <span className="text-md font-bold">User Score</span>
                   </div>
                 </div>
-                <i className="text-gray-700">{detailData.tagline}</i>
-                <div>
+                <i className="text-gray-300">{detailData.tagline}</i>
+                <div className="text-white">
                   <h3 className="font-bold text-xl">Overview</h3>
                   <h4 className="text-md lg:text-lg">{detailData.overview}</h4>
                 </div>
-                <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 lg:gap-2">
+                <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 lg:gap-2 text-white">
                   <div className="col-span-1 flex flex-col space-y-2">
                     <div>
                       <h3 className="font-bold text-md">Status</h3>
@@ -122,7 +122,7 @@ function DetailPage() {
                       <span>{detailData.type}</span>
                     </div>
                   </div>
-                  <div className="col-span-2 flex flex-col space-y-2 h-fit">
+                  <div className="col-span-2 flex flex-col space-y-2 h-fit text-white">
                     <h3 className="font-bold text-md">Keywords</h3>
                     <div className="flex flex-wrap gap-2">
                       {detailData.keywords?.map((item) => (
@@ -142,11 +142,11 @@ function DetailPage() {
         </div>
       </section>
       <section className="pt-8 container mx-auto">
-        <h3 className="font-semibold text-2xl pb-2">Similar Movies</h3>
+        <h3 className="font-semibold text-2xl pb-2">Similar TV Series</h3>
         <div className="overflow-x-auto overflow-y-hidden w-full h-52 min-w-0">
           <div className="flex flex-nowrap space-x-3 h-full pb-2">
             {detailData.similars?.map((item) => (
-              <SimpleCard item={item} key={item.id} />
+              <SimpleCard item={item} key={item.id} category="tv" />
             ))}
           </div>
         </div>

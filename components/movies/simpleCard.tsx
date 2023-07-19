@@ -3,11 +3,16 @@ import React from "react";
 import { DiscoveryInterface } from "../interface";
 import { useSearchParams } from "next/navigation";
 
-function SimpleCard({ item }: { item: DiscoveryInterface }) {
-  const searchParams = useSearchParams();
+function SimpleCard({
+  item,
+  category,
+}: {
+  item: DiscoveryInterface;
+  category: "tv" | "movie";
+}) {
   return (
     <Link
-      href={`/detail/${item.id}?category=${searchParams.get("category")}`}
+      href={`/${category}/${item.id}`}
       key={item.id}
       title={item.title}
       className="group w-[350px]"

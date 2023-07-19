@@ -1,12 +1,15 @@
 import classNames from "@/helpers/classnames";
 import React from "react";
 
+export const categories: Array<{ label: string; value: string }> = [
+  { label: "Movie", value: "movie" },
+  { label: "TV Series", value: "tv" },
+];
+
 function Tabs({
-  categories,
   category,
   setCategory,
 }: {
-  categories: Array<{ label: string; value: string }>;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   category: string;
 }) {

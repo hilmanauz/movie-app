@@ -8,12 +8,7 @@ import {
 } from "@/components/interface";
 import CardWithDetail from "@/components/movies/cardWithDetail";
 import SearchInput from "@/components/searchInput";
-import Tabs from "@/components/tabs";
-
-export const categories = [
-  { label: "Movie", value: "movie" },
-  { label: "TV Series", value: "tv" },
-];
+import Tabs, { categories } from "@/components/tabs";
 
 export default function Home() {
   const [page, setPage] = React.useState(1);
@@ -116,11 +111,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold">Free To Watch</h2>
             <div className="gap-4 flex lg:flex-row flex-col items-center">
               <div className="w-full lg:w-[25%]">
-                <Tabs
-                  categories={categories}
-                  category={category}
-                  setCategory={setCategory}
-                />
+                <Tabs category={category} setCategory={setCategory} />
               </div>
               <div className="w-full lg:w-[75%]">
                 <SearchInput

@@ -1,5 +1,5 @@
-import { categories } from "@/app/page";
 import React from "react";
+import { categories } from "./tabs";
 
 function SearchInput({
   filter,
